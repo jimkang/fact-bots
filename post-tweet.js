@@ -1,4 +1,4 @@
-// var config = require('./configs/config');
+var config = require('./config/config');
 var callNextTick = require('call-next-tick');
 var Twit = require('twit');
 var async = require('async');
@@ -21,7 +21,7 @@ var fuckShitUp = createFuckShitUp({
 var language = probable.roll(2) === 0 ? 'en' : 'simple';
 console.log('Langage:', language);
 
-// var twit = new Twit(config.twitter);
+var twit = new Twit(config.twitter);
 
 function runWaterfall() {
   async.waterfall(
