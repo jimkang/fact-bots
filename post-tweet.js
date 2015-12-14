@@ -14,7 +14,12 @@ if (process.argv.length > 2) {
 
 var attemptCount = 0;
 
-var fuckShitUp = createFuckShitUp();
+var fuckShitUp = createFuckShitUp({
+  useAlternativeModifiers: true
+});
+
+var language = probable.roll(2) === 0 ? 'en' : 'simple';
+console.log('Langage:', language);
 
 // var twit = new Twit(config.twitter);
 
@@ -33,7 +38,7 @@ function runWaterfall() {
 
 function fetchArticle(done) {
   var opts = {
-    language: 'en'
+    language: language
   };
   getRandomArticle(opts, done);
 }
@@ -58,8 +63,17 @@ function fuckSentencesUp(sentences, done) {
 function pickSentence(sentences, done) {
   var shortSentences = sentences.filter(isUnder141Chars);
   shortSentences = shortSentences.filter(isLongEnough);
+  shortSentences = shortSentences.filter(isNotARetrievedNote);
+  if (shortSentences.length < 1) {
+    callNextTick(
+      done,
+      new Error('Filtered all ' + sentences.length + ' sentences.')
+    );
+    return;
+  }
+
   var sentence = probable.pickFromArray(shortSentences);
-  console.log('sentence:', sentence);
+  // console.log('sentence:', sentence);
   callNextTick(done, null, sentence);
 }
 
@@ -82,6 +96,10 @@ function isUnder141Chars(s) {
 
 function isLongEnough(s) {
   return s.length > 8;
+}
+
+function isNotARetrievedNote(s) {
+  return s.indexOf('Retrieved on ' !== 0);
 }
 
 function wrapUp(error, data) {
