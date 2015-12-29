@@ -6,6 +6,9 @@ var getRandomArticle = require('get-random-article');
 var getSentencesFromArticle = require('get-sentences-from-article');
 var probable = require('probable');
 var createFuckShitUp = require('fuck-shit-up').create;
+var createIsCool = require('iscool');
+
+var iscool = createIsCool();
 
 var dryRun = false;
 if (process.argv.length > 2) {
@@ -45,6 +48,8 @@ function fetchArticle(done) {
 
 function getSentences(article, done) {
   var sentences = getSentencesFromArticle(article);
+  sentences = sentences.filter(sentenceIsAllCool);
+
   if (!sentences || sentences.length < 1) {
     callNextTick(
       done, new Error('Could not get sentences from article: ' + article)
@@ -115,6 +120,13 @@ function wrapUp(error, data) {
       attemptCount += 1;
       callNextTick(runWaterfall);
     }
+  }
+}
+
+function sentenceIsAllCool(sentence) {
+  if (typeof sentence === 'string') {
+    var words = sentence.split(/[ ":.,;!?#]/);
+    return words.every(iscool);
   }
 }
 
