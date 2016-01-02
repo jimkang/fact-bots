@@ -24,8 +24,8 @@
     "async": "^0.9.2",
     "call-next-tick": "^1.1.2",
     "fuck-shit-up": "^1.1.2",
-    "get-random-article": "^1.0.1",
-    "get-sentences-from-article": "^1.0.3",
+    "get-random-article": "^1.0.3",
+    "get-sentences-from-article": "^1.0.4",
     "iscool": "^1.1.17",
     "probable": "^1.8.0",
     "twit": "^1.1.20"

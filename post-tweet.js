@@ -21,8 +21,30 @@ var fuckShitUp = createFuckShitUp({
   useAlternativeModifiers: true
 });
 
-var language = probable.roll(2) === 0 ? 'en' : 'simple';
-console.log('Langage:', language);
+var articleOptsTable = probable.createRangeTable([
+  [
+    [0, 0],
+    {
+      language: 'en'
+    }
+  ],
+  [
+    [1, 1],
+    {
+      language: 'simple'
+    }
+  ],
+  [
+    [2, 2],
+    {
+      wikipediaProtocol: 'http',
+      wikipediaDomain: 'bulbapedia.bulbagarden.net'
+    }
+  ]
+]);
+
+var randomArticleOpts = articleOptsTable.roll();
+// console.log('randomArticleOpts:', randomArticleOpts);
 
 var twit = new Twit(config.twitter);
 
@@ -40,13 +62,11 @@ function runWaterfall() {
 }
 
 function fetchArticle(done) {
-  var opts = {
-    language: language
-  };
-  getRandomArticle(opts, done);
+  getRandomArticle(randomArticleOpts, done);
 }
 
 function getSentences(article, done) {
+  // console.log(article);
   var sentences = getSentencesFromArticle(article);
   sentences = sentences.filter(sentenceIsAllCool);
 
